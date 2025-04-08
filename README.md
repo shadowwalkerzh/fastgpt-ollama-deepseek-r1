@@ -29,9 +29,19 @@
 
 ## 快速启动各服务及配置
 - 一键启动框架平台及模型服务 （**如果在中国大陆访问请提前配置好VPN**）
-    ```shell
-        docker compose -f docker-compose.yml  up -d
-    ```
+- 下载配置文件：`下载的目录不要放在Mac的 Desktop 目录下，因为一般 Desktop 会有特殊的权限限制，Docker 文件挂载可能会受限`。
+    - 下载 `docker-compose.yml`
+        ```shell
+            curl -O https://raw.githubusercontent.com/shadowwalkerzh/fastgpt-ollama-deepseek-r1/refs/heads/main/docker-compose.yml > docker-compose.yml
+        ```
+    - 下载 `config.json`
+        ```shell
+            curl -O https://raw.githubusercontent.com/shadowwalkerzh/fastgpt-ollama-deepseek-r1/refs/heads/main/config.json > config.json
+        ```
+    - 运行
+        ```
+            docker compose -f docker-compose.yml up -d
+        ```
 - 首次启动时，因为要下载大模型和各镜像文件，需要花费比较长的时间，如果是下载 DeepseekR1:7b 需要5-10分钟
     > 执行完成后可以通过 `docker logs -f --tail=100 ollama` 观察启动日志，看模型文件是否已经下载完成，并且完成启动成功。如果出现 `启动模型服务: xxx` 之类的日志并且没有报错说明模型下载并启动完成了。可以执行 `docker exec -it ollama sh` -> `ollama list`  看下载了哪些模型，`ollama ps` 看已经运行成功了哪些模型。
 - 所有服务启动后，就有一些地址可以访问：
@@ -45,7 +55,7 @@
     - 账号 -> 模型提供商 -> 模型配置 -> 添加模型，分别添加两个语言模型 `ds-r1`, `my-gemma3-1b` 和索引模型 `my-embed-nomic`， 索引模型需要单独配置调用API。如图： 
         > <img height="200" width="300" src="./add_model.png">  <img height="200" width="300" src="./add_index_model.png">
     - 将新增的3个模型在 `Ollama 渠道` 编辑中添加进来后，就跟第一张图的结果一样了
-    - 模型测试：可以在 `模型渠道` 里选择 `Ollama` 并🈯️测试模型，返回成功表示模型连通， 也可以在模型配置界面选择对应的模型进行测试。
+    - 模型测试：可以在 `模型渠道` 里选择 `Ollama` 并批量测试模型，返回成功表示模型连通， 也可以在模型配置界面选择对应的模型进行测试。
     - 创建自己的知识库：知识库 -> 新建，先创建自己的一个语料集合，然后再添加自己的知识库文件，选择合适的分段策略，然后在确认，在右侧就可以看到和选择对应的 `索引模型`,`文本理解模型`,`图片理解模型`，状态为 `已就绪`表明重新创建索引完成。可以通过 `搜索测试` 菜单进行测试。这里可以补充你已经有离线语料，并进行合理的配置后重新创建索引。
     - 创建自己的ChatAPP 应用：工作台 -> 创建 -> 简易应用 -> `First APP`: 可以选择对应的语言模型，配置相关的知识库及其它参数，在右侧可以发送消息测试。成功后点击右上角保存。
     - 测试聊天服务：聊天 -> 选择对应的应用，可以进行聊天了，窗口顶部可以展示对应的使用模型信息。
